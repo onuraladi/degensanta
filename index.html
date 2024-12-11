@@ -6,7 +6,7 @@
     <title>Degen Santa AI</title>
     <link rel="icon" href="santaai.ico" type="image/x-icon">
     <style>
-        body {
+        body {  
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: rgb(38, 0, 255);
@@ -103,6 +103,7 @@
         <input type="text" id="nameInput" placeholder="Enter your nickname" />
         <button onclick="generateMessage()">Get Message</button>
         <div class="message" id="messageOutput"></div>
+        <button id="sendTweetBtn" style="display: none;" onclick="sendTweet()">Send Tweet</button>
         <img src="1.gif" alt="Gif" class="gif">
     </div>
 
@@ -148,6 +149,9 @@
 
                 document.getElementById('messageOutput').innerText = message;
 
+                // Show the "Send Tweet" button
+                document.getElementById('sendTweetBtn').style.display = 'inline-block';
+
                 // Find a good English voice
                 const preferredVoice = voices.find(voice => voice.lang.startsWith('en') && voice.name.includes('Google')) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
                 const utterance = new SpeechSynthesisUtterance(message);
@@ -160,6 +164,13 @@
             // Attach the generateMessage function
             window.generateMessage = generateMessage;
         });
+
+        function sendTweet() {
+            const message = document.getElementById('messageOutput').innerText;
+            const tweetText = `${message} $DSANTA @degensantaai`;
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+            window.open(tweetUrl, '_blank');
+        }
 
         function changeBackground(image) {
             document.body.style.backgroundImage = `url(${image})`;

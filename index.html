@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Degen Santa AI</title>
+    <link rel="icon" href="santaai.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: rgb(38, 0, 255);
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .top-buttons img {
+            width: 50px;
+            height: 50px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .snowflake {
+            position: fixed;
+            top: -10%;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(110vh) translateX(50px);
+            }
+        }
+        .gif {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-buttons">
+        <a href="https://twitter.com" target="_blank">
+            <img src="a.png" alt="Twitter">
+        </a>
+        <a href="https://pumpfun.com" target="_blank">
+            <img src="b.jpg" alt="PumpFun">
+        </a>
+        <a href="https://telegram.com" target="_blank">
+            <img src="c.png" alt="Telegram">
+        </a>
+    </div>
+    <div class="container">
+        <h1>Degen Santa AI</h1>
+        <p>Enter your name to get a personalized New Year message!</p>
+        <input type="text" id="nameInput" placeholder="Enter your nickname" />
+        <button onclick="generateMessage()">Get Message</button>
+        <div class="message" id="messageOutput"></div>
+        <img src="1.gif" alt="Gif" class="gif">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const synth = window.speechSynthesis;
+            let voices = [];
+
+            // Load voices and filter by English language
+            const loadVoices = () => {
+                voices = synth.getVoices();
+                if (!voices.length) {
+                    console.warn('No voices found. Please check your browser settings.');
+                }
+            };
+
+            // Ensure voices are loaded
+            synth.onvoiceschanged = loadVoices;
+            loadVoices();
+
+            function generateMessage() {
+                const name = document.getElementById('nameInput').value.trim();
+                if (!name) {
+                    alert('Please enter a name.');
+                    return;
+                }
+
+                const messages = [
+                    `Hey @${name}, hope this Xmas you won't end up having s3x with your sister-in-law again. Greets, Santa.`,
+                    `Hey @${name}, I asked Santa to help you lose your virginity since you spend 24/7 in the Web3 trenches. Greets!`,
+                    `@${name}, may this holiday season bring you fewer rug pulls and more actual gains in Web3. Cheers!`,
+                    `Dear @${name}, wishing you a Christmas filled with joy, not just JPEGs. Get outside for once!`,
+                    `Hey @${name}, Santa said he can't fix your portfolio, but he hopes you'll find some peace this Christmas. Greets!`,
+                    `@${name}, don’t forget: Christmas is about giving... even if it's just the private keys to your burner wallet. Cheers!`,
+                    `Dear @${name}, may your holiday season be filled with love, laughter, and fewer failed transactions on the blockchain.`,
+                    `Hey @${name}, Santa checked twice, and yes, you're still degen. Merry Christmas anyway!`,
+                    `@${name}, here's to a holiday season as lit as your favorite meme coin. Cheers to another year of chaos!`,
+                    `Dear @${name}, remember, Christmas is the one time of year when you can blame Santa for all the gas fees. Enjoy!`
+                ];
+
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                const message = messages[randomIndex];
+
+                document.getElementById('messageOutput').innerText = message;
+
+                // Find a good English voice
+                const preferredVoice = voices.find(voice => voice.lang.startsWith('en') && voice.name.includes('Google')) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.voice = preferredVoice;
+
+                // Speak the message
+                synth.speak(utterance);
+            }
+
+            // Attach the generateMessage function
+            window.generateMessage = generateMessage;
+        });
+
+        function changeBackground(image) {
+            document.body.style.backgroundImage = `url(${image})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundRepeat = 'no-repeat';
+        }
+
+        // Create snowflake effect
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random();
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        setInterval(createSnowflake, 100);
+    </script>
+</body>
+</html>
